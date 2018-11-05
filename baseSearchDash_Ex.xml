@@ -1,0 +1,38 @@
+<dashboard>
+  <label>PE1</label>
+  <search id="base_bots_ST">
+    <query>| metadata type=sourcetypes index=botsv1</query>
+    <earliest>-3y</earliest>
+    <latest>now</latest>
+  </search>
+  <row>
+    <panel>
+      <table>
+        <title>Total SourceTypes - Table</title>
+        <search base="base_bots_ST">
+          <query>| stats values(sourcetype) as SourceType by totalCount | sort -totalCount</query>
+        </search>
+        <option name="drilldown">cell</option>
+      </table>
+    </panel>
+    <panel>
+      <chart>
+        <title>Top 5 SourceTypes - Bar Chart</title>
+        <search base="base_bots_ST">
+          <query>| head 5 | fields sourcetype,totalCount</query>
+        </search>
+        <option name="charting.chart">bar</option>
+        <option name="charting.drilldown">all</option>
+      </chart>
+    </panel>
+    <panel>
+      <chart>
+        <title>Top 5 SourceTypes - Column Chart</title>
+        <search base="base_bots_ST">
+          <query>| head 5 | fields sourcetype,totalCount</query>
+        </search>
+        <option name="charting.chart">column</option>
+      </chart>
+    </panel>
+  </row>
+</dashboard>
