@@ -1,0 +1,33 @@
+#!/bin/bash
+
+## Splunk Single Instance Installation Script
+#
+## 1) Create user splunk
+##    1.5) Set splunk user password
+## 2) Download Splunk using wget
+## 3) Install Splunk
+## 4) Set Splunk to be owned by user splunk, enabled at boot
+## 5) Start Splunk
+#
+
+# 1
+sudo useradd -Md /opt/splunk -c "Splunk user" -s /bin/bash -U splunk
+
+# 1.5
+sudo passwd splunk
+
+# 2, 3
+## Uncomment appropriate block for system 
+# Download Splunk 7.1.4 for Debian Package Manager, x64 Linux systems
+#wget -O splunk-7.1.4-5a7a840afcb3-linux-2.6-amd64.deb 'https://www.splunk.com/page/download_track?file=7.1.4/linux/splunk-7.1.4-5a7a840afcb3-linux-2.6-amd64.deb&ac=&wget=true&name=wget&platform=Linux&architecture=x86_64&version=7.1.4&product=splunk&typed=release'
+#sudo apt-get install ./splunk-7.1.4-5a7a840afcb3-linux-2.6-amd64.deb
+
+# Download Splunk 7.1.4 for RedHat Package Manager, x64 Linux systems
+#wget -O splunk-7.1.4-5a7a840afcb3-linux-2.6-x86_64.rpm 'https://www.splunk.com/page/download_track?file=7.1.4/linux/splunk-7.1.4-5a7a840afcb3-linux-2.6-x86_64.rpm&ac=&wget=true&name=wget&platform=Linux&architecture=x86_64&version=7.1.4&product=splunk&typed=release'
+#sudo rpm -iv ./splunk-7.1.4-5a7a840afcb3-linux-2.6-x86_64.rpm
+
+# 4
+sudo /opt/splunk/bin/splunk --accept-license enable boot-start -user splunk
+
+# 5
+sudo -u splunk /opt/splunk/bin/splunk start
