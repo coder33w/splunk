@@ -1,0 +1,14 @@
+| from datamodel:"Authentication"   
+| search user="*USERNAME*"  
+| `get_asset(src)`  
+| iplocation src   
+| sort 0 + _time
+| eval session_lat=if(isnull(src_lat), lat, src_lat)  
+| eval session_lon=if(isnull(src_long), lon, src_long) 
+| eval session_city=if(isnull(src_city), City, src_city)
+| where isnotnull(session_lat) and isnotnull(session_lon)
+| sort 0 + _time
+| streamstats current=t window=2 earliest(session_lat) as prev_lat, earliest(session_lon) as prev_lon, earliest(session_city) as prev_city, earliest(_time) as prev_time, earliest(src) as prev_src, latest(user_bunit) as user_bunit by user
+| where (src!=prev_src)
+| `globedistance(session_lat,session_lon,prev_lat,prev_lon,kilometers)`
+| table _time src distance session_city session_lat session_lon  
